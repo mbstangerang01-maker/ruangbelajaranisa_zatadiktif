@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menjelajah Dunia Zat Adiktif - Media Pembelajaran Kelas 9</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        tealBrand: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                        },
+                        blueBrand: {
+                            50: '#eff6ff',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                        },
+                        accentOrange: {
+                            500: '#f97316',
+                            600: '#ea580c',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom styles for drag and drop */
+        .dropzone {
+            transition: all 0.3s ease;
+        }
+        .dropzone.drag-over {
+            background-color: #ccfbf1;
+            border-color: #0d9488;
+        }
+    </style>
+</head>
+<body class="bg-tealBrand-50 text-gray-800 min-h-screen flex flex-col justify-between">
+
+    <!-- HEADER & NAVIGASI -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <!-- Logo / Judul Brand -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('home')">
+                    <div class="bg-tealBrand-600 text-white p-2.5 rounded-xl shadow-md">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-tealBrand-700 leading-tight">Zat Adiktif & Psikotropika</h1>
+                        <p class="text-xs text-gray-500 font-medium">IPA Terpadu Kelas 9 • Fase D</p>
+                    </div>
+                </div>
+
+                <!-- Navigasi Desktop -->
+                <nav class="hidden md:flex space-x-1 lg:space-x-2">
+                    <button onclick="switchTab('home')" id="nav-home" class="nav-btn px-3 py-2 rounded-lg text-sm font-semibold transition-all bg-tealBrand-600 text-white shadow-sm">Home</button>
+                    <button onclick="switchTab('tujuan')" id="nav-tujuan" class="nav-btn px-3 py-2 rounded-lg text-sm font-semibold transition-all text-gray-600 hover:bg-tealBrand-50 hover:text-tealBrand-600">Tujuan</button>
+                    <button onclick="switchTab('materi')" id="nav-materi" class="nav-btn px-3 py-2 rounded-lg text-sm font-semibold transition-all text-gray-600 hover:bg-tealBrand-50 hover:text-tealBrand-600">Materi</button>
+                    <button onclick="switchTab('kuis')" id="nav-kuis" class="nav-btn px-3 py-2 rounded-lg text-sm font-semibold transition-all text-gray-600 hover:bg-tealBrand-50 hover:text-tealBrand-600">Kuis Interaktif</button>
+                    <button onclick="switchTab('dragdrop')" id="nav-dragdrop" class="nav-btn px-3 py-2 rounded-lg text-sm font-semibold transition-all text-gray-600 hover:bg-tealBrand-50 hover:text-tealBrand-600">Drag & Drop</button>
+                    <button onclick="switchTab('tentang')" id="nav-tentang" class="nav-btn px-3 py-2 rounded-lg text-sm font-semibold transition-all text-gray-600 hover:bg-tealBrand-50 hover:text-tealBrand-600">Tentang</button>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="text-gray-600 hover:text-tealBrand-600 focus:outline-none p-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t px-4 pt-2 pb-4 space-y-1 shadow-lg">
+            <button onclick="switchTab('home'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-tealBrand-50 hover:text-tealBrand-600">Home</button>
+            <button onclick="switchTab('tujuan'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-tealBrand-50 hover:text-tealBrand-600">Tujuan Pembelajaran</button>
+            <button onclick="switchTab('materi'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-tealBrand-50 hover:text-tealBrand-600">Materi</button>
+            <button onclick="switchTab('kuis'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-tealBrand-50 hover:text-tealBrand-600">Kuis Interaktif</button>
+            <button onclick="switchTab('dragdrop'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-tealBrand-50 hover:text-tealBrand-600">Drag and Drop</button>
+            <button onclick="switchTab('tentang'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-tealBrand-50 hover:text-tealBrand-600">Tentang</button>
+        </div>
+    </header>
+
+    <!-- KONTEN UTAMA (SPA TAB CONTENT) -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- 1. TAB HOME -->
+        <section id="tab-home" class="tab-content space-y-8">
+            <div class="bg-gradient-to-r from-tealBrand-600 to-blueBrand-600 rounded-3xl p-8 md:p-12 text-white shadow-xl flex flex-col md:flex-row items-center justify-between">
+                <div class="space-y-6 md:w-1/2">
+                    <span class="bg-white/20 text-teal-100 text-xs font-semibold px-3 py-1.5 rounded-full uppercase tracking-wider">Media Pembelajaran Interaktif</span>
+                    <h2 class="text-3xl md:text-5xl font-extrabold leading-tight">Menjelajah Dunia Zat Adiktif</h2>
+                    <p class="text-teal-50 text-base md:text-lg leading-relaxed">Kenali berbagai jenis zat adiktif, psikotropika, serta dampaknya bagi kesehatan tubuh kita. Bersama kita wujudkan generasi sehat tanpa narkoba!</p>
+                    <div class="flex flex-wrap gap-4 pt-2">
+                        <button onclick="switchTab('materi')" class="bg-accentOrange-500 hover:bg-accentOrange-600 text-white font-bold px-6 py-3 rounded-xl shadow-lg transition-transform transform hover:-translate-y-0.5 flex items-center space-x-2">
+                            <span>Mulai Belajar</span>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                        </button>
+                        <button onclick="switchTab('kuis')" class="bg-white text-tealBrand-700 hover:bg-tealBrand-50 font-bold px-6 py-3 rounded-xl shadow-lg transition-transform transform hover:-translate-y-0.5">Uji Kemampuan (Kuis)</button>
+                    </div>
+                </div>
+                <div class="mt-8 md:mt-0 md:w-1/2 flex justify-center">
+                    <!-- Ilustrasi Vektor Kartun Edukatif (SVG) -->
+                    <svg class="w-72 h-72 md:w-96 md:h-96 drop-shadow-lg" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="250" cy="250" r="200" fill="#ccfbf1" opacity="0.6"/>
+                        <!-- Organ Tubuh / Otak & Hati Stylized -->
+                        <path d="M250 130C200 130 160 170 160 220C160 250 180 275 200 290V340C200 351 209 360 220 360H280C291 360 300 351 300 340V290C320 275 340 250 340 220C340 170 300 130 250 130Z" fill="#14b8a6"/>
+                        <!-- Daun Kesehatan / Perisai -->
+                        <path d="M250 390C250 390 320 320 320 240C320 195 285 160 250 160C215 160 180 195 180 240C180 320 250 390 250 390Z" fill="#0f766e" opacity="0.8"/>
+                        <!-- Ikon Senyum / Edukasi -->
+                        <circle cx="220" cy="220" r="15" fill="white"/>
+                        <circle cx="280" cy="220" r="15" fill="white"/>
+                        <circle cx="220" cy="220" r="6" fill="#0f766e"/>
+                        <circle cx="280" cy="220" r="6" fill="#0f766e"/>
+                        <path d="M225 265C235 275 265 275 275 265" stroke="white" stroke-width="6" stroke-linecap="round"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Fitur Unggulan Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-tealBrand-100 hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-tealBrand-100 text-tealBrand-600 rounded-xl flex items-center justify-center font-bold text-xl mb-4">📖</div>
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">Materi Terstruktur</h3>
+                    <p class="text-gray-600 text-sm">Pelajari konsep zat adiktif, psikotropika, efek stimulan, depresan, hingga dampaknya bagi organ tubuh.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-tealBrand-100 hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-blue-100 text-blueBrand-600 rounded-xl flex items-center justify-center font-bold text-xl mb-4">🔊</div>
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">Fitur Suara Pembaca</h3>
+                    <p class="text-gray-600 text-sm">Dilengkapi Text-to-Speech otomatis agar kamu bisa mendengarkan materi dengan jelas dan santai.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-tealBrand-100 hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-amber-100 text-accentOrange-500 rounded-xl flex items-center justify-center font-bold text-xl mb-4">🏆</div>
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">Kuis & Interaktif</h3>
+                    <p class="text-gray-600 text-sm">Uji pemahamanmu lewat kuis pilihan ganda lengkap dengan pembahasan dan latihan Drag and Drop seru.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. TAB TUJUAN PEMBELAJARAN -->
+        <section id="tab-tujuan" class="tab-content hidden space-y-6">
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-tealBrand-100">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold text-tealBrand-700">Tujuan Pembelajaran</h2>
+                        <p class="text-gray-500 text-sm">Fase D • Ilmu Pengetahuan Alam Kelas 9</p>
+                    </div>
+                    <button onclick="readText('tujuan-content')" class="bg-tealBrand-100 text-tealBrand-700 hover:bg-tealBrand-200 px-4 py-2 rounded-xl text-sm font-semibold flex items-center space-x-2 transition">
+                        <span>🔊 Baca Teks</span>
+                    </button>
+                </div>
+                <div id="tujuan-content" class="space-y-4 text-gray-700 text-base md:text-lg leading-relaxed">
+                    <div class="flex items-start space-x-4 bg-tealBrand-50 p-4 rounded-2xl">
+                        <span class="bg-tealBrand-600 text-white font-bold w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">1</span>
+                        <p>Peserta didik mampu menjelaskan pengertian zat adiktif dan pengelompokannya ke dalam narkotika, psikotropika, dan zat psikositika/psiko-aktif lainnya dengan benar.</p>
+                    </div>
+                    <div class="flex items-start space-x-4 bg-tealBrand-50 p-4 rounded-2xl">
+                        <span class="bg-tealBrand-600 text-white font-bold w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">2</span>
+                        <p>Peserta didik dapat menganalisis perbedaan jenis efek zat adiktif terhadap sistem saraf pusat (stimulan, depresan, dan halusinogen).</p>
+                    </div>
+                    <div class="flex items-start space-x-4 bg-tealBrand-50 p-4 rounded-2xl">
+                        <span class="bg-tealBrand-600 text-white font-bold w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">3</span>
+                        <p>Peserta didik mampu mengidentifikasi dampak negatif penyalahgunaan zat adiktif terhadap organ tubuh manusia seperti paru-paru, hati (liver), dan jantung.</p>
+                    </div>
+                    <div class="flex items-start space-x-4 bg-tealBrand-50 p-4 rounded-2xl">
+                        <span class="bg-tealBrand-600 text-white font-bold w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">4</span>
+                        <p>Peserta didik dapat merumuskan langkah-langkah preventif dan pola hidup sehat untuk menghindari penyalahgunaan narkoba dan zat adiktif di lingkungan remaja.</p>
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-end">
+                    <button onclick="stopSpeech()" class="bg-gray-200 text-gray-700 hover:bg-gray-300 px-4 py-2 rounded-xl text-sm font-semibold flex items-center space-x-2 transition">
+                        <span>⏹️ Berhenti Suara</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. TAB MATERI -->
+        <section id="tab-materi" class="tab-content hidden space-y-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between bg-white p-6 rounded-2xl shadow-sm border border-tealBrand-100 gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-tealBrand-700">Materi Pembelajaran</h2>
+                    <p class="text-gray-500 text-sm">Pilih topik materi atau dengarkan penjelasan lengkap menggunakan suara pembaca.</p>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <button onclick="readText('materi-full-content')" class="bg-tealBrand-600 hover:bg-tealBrand-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center space-x-2 shadow-sm transition">
+                        <span>🔊 Baca Seluruh Materi</span>
+                    </button>
+                    <button onclick="stopSpeech()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-xl text-sm font-semibold transition">
+                        ⏹️ Stop
+                    </button>
+                </div>
+            </div>
+
+            <div id="materi-full-content" class="space-y-8">
+                <!-- Sub-materi 1 -->
+                <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-tealBrand-100 space-y-4">
+                    <div class="flex items-center justify-between border-b pb-4">
+                        <h3 class="text-xl font-bold text-tealBrand-700 flex items-center space-x-3">
+                            <span class="bg-tealBrand-100 text-tealBrand-700 w-8 h-8 rounded-lg flex items-center justify-center text-sm">1</span>
+                            <span>Pengertian & Pengelompokan Zat Adiktif</span>
+                        </h3>
+                    </div>
+                    <div class="text-gray-700 space-y-3 leading-relaxed text-base">
+                        <p><strong>Zat adiktif</strong> adalah zat-zat yang apabila dikonsumsi dapat menyebabkan ketergantungan (adiksi) fisik maupun psikologis yang sulit dihentikan. Jika dihentikan, pengguna akan mengalami gejala sakit fisik atau mental tertentu (sakaw).</p>
+                        <p>Zat adiktif dikelompokkan menjadi tiga golongan utama:</p>
+                        <ul class="list-disc pl-6 space-y-2">
+                            <li><strong>Narkotika:</strong> Zat atau obat yang berasal dari tanaman atau buatan yang dapat menyebabkan penurunan atau perubahan kesadaran, hilangnya rasa nyeri, dan ketergantungan (contoh: ganja, heroin, kokain).</li>
+                            <li><strong>Psikotropika:</strong> Zat atau obat, baik alamiah maupun sintetis bukan narkotika, yang berkhasiat psikoaktif melalui pengaruh selektif pada susunan saraf pusat (contoh: ekstasi, sabu-sabu, diazepam).</li>
+                            <li><strong>Zat Psiko-aktif Lainnya:</strong> Bahan lain yang berpotensi menimbulkan ketergantungan, seperti nikotin pada rokok, alkohol pada minuman keras, serta kafein pada kopi dan teh.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Sub-materi 2 -->
+                <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-tealBrand-100 space-y-4">
+                    <div class="flex items-center justify-between border-b pb-4">
+                        <h3 class="text-xl font-bold text-tealBrand-700 flex items-center space-x-3">
+                            <span class="bg-tealBrand-100 text-tealBrand-700 w-8 h-8 rounded-lg flex items-center justify-center text-sm">2</span>
+                            <span>Jenis & Efek Terhadap Sistem Saraf Pusat</span>
+                        </h3>
+                    </div>
+                    <div class="text-gray-700 space-y-3 leading-relaxed text-base">
+                        <p>Berdasarkan pengaruhnya terhadap sistem saraf pusat manusia, zat adiktif dibagi menjadi tiga jenis efek:</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                            <div class="bg-tealBrand-50 p-4 rounded-2xl border border-tealBrand-100">
+                                <h4 class="font-bold text-tealBrand-700 mb-1">Stimulan</h4>
+                                <p class="text-sm text-gray-600">Mempercepat aktivitas sistem saraf pusat. Membuat tubuh lebih terjaga, segar, dan detak jantung meningkat. Contoh: Kafein (kopi), nikotin, kokain.</p>
+                            </div>
+                            <div class="bg-blue-50 p-4 rounded-2xl border border-blue-100">
+                                <h4 class="font-bold text-blue-700 mb-1">Depresan</h4>
+                                <p class="text-sm text-gray-600">Memperlambat aktivitas sistem saraf pusat. Membuat pengguna merasa tenang, mengantuk, atau bahkan tidak sadarkan diri. Contoh: Alkohol, sedatif, barbiturat.</p>
+                            </div>
+                            <div class="bg-amber-50 p-4 rounded-2xl border border-amber-100">
+                                <h4 class="font-bold text-amber-700 mb-1">Halusinogen</h4>
+                                <p class="text-sm text-gray-600">Menimbulkan efek halusinasi, yaitu merasakan, mendengar, atau melihat sesuatu yang sebenarnya tidak ada. Contoh: LSD, ganja, ekstasi.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sub-materi 3 -->
+                <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-tealBrand-100 space-y-4">
+                    <div class="flex items-center justify-between border-b pb-4">
+                        <h3 class="text-xl font-bold text-tealBrand-700 flex items-center space-x-3">
+                            <span class="bg-tealBrand-100 text-tealBrand-700 w-8 h-8 rounded-lg flex items-center justify-center text-sm">3</span>
+                            <span>Dampak terhadap Organ Tubuh Manusia</span>
+                        </h3>
+                    </div>
+                    <div class="text-gray-700 space-y-3 leading-relaxed text-base">
+                        <p>Penyalahgunaan zat adiktif mendatangkan kerusakan serius pada organ vital manusia:</p>
+                        <ul class="list-disc pl-6 space-y-2">
+                            <li><strong>Paru-paru & Saluran Pernapasan:</strong> Asap rokok mengandung tar dan nikotin yang mengendap di paru-paru, memicu kanker paru, bronkitis kronis, serta sesak napas.</li>
+                            <li><strong>Darah (Karbon Monoksida):</strong> Gas $CO$ dalam asap rokok memiliki daya ikat terhadap hemoglobin darah yang jauh lebih kuat daripada oksigen, sehingga organ tubuh kekurangan oksigen.</li>
+                            <li><strong>Hati (Liver):</strong> Konsumsi alkohol jangka panjang memaksa hati bekerja ekstra keras menetralkan racun, menyebabkan peradangan hingga sirosis hati (kerusakan permanen sel hati).</li>
+                            <li><strong>Otak & Saraf:</strong> Merusak sel-sel saraf otak yang mengatur emosi, memori, koordinasi motorik, serta memicu gangguan kejiwaan.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Sub-materi 4 -->
+                <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-tealBrand-100 space-y-4">
+                    <div class="flex items-center justify-between border-b pb-4">
+                        <h3 class="text-xl font-bold text-tealBrand-700 flex items-center space-x-3">
+                            <span class="bg-tealBrand-100 text-tealBrand-700 w-8 h-8 rounded-lg flex items-center justify-center text-sm">4</span>
+                            <span>Pencegahan & Pola Hidup Sehat</span>
+                        </h3>
+                    </div>
+                    <div class="text-gray-700 space-y-3 leading-relaxed text-base">
+                        <p>Sebagai remaja pelajar SMP, tindakan preventif terbaik agar terhindar dari jeratan zat adiktif dan narkoba antara lain:</p>
+                        <ul class="list-disc pl-6 space-y-2">
+                            <li>Mengikuti kegiatan positif seperti ekstrakurikuler sekolah, seni, dan olahraga teratur.</li>
+                            <li>Memilih pergaulan yang sehat dan berani menolak ajakan negatif dari lingkungan sekitar.</li>
+                            <li>Mendekatkan diri kepada Tuhan Yang Maha Esa dan menjaga komunikasi terbuka dengan orang tua atau guru saat menghadapi masalah.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. TAB KUIS INTERAKTIF -->
+        <section id="tab-kuis" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-tealBrand-100 max-w-3xl mx-auto">
+                <div class="text-center space-y-2 mb-8">
+                    <span class="bg-tealBrand-100 text-tealBrand-700 text-xs font-semibold px-3 py-1 rounded-full">Evaluasi Pembelajaran</span>
+                    <h2 class="text-2xl md:text-3xl font-bold text-tealBrand-700">Kuis Interaktif Zat Adiktif</h2>
+                    <p class="text-gray-500 text-sm">Uji seberapa jauh pemahamanmu mengenai materi zat adiktif, psikotropika, dan dampaknya.</p>
+                </div>
+
+                <!-- Container Soal Kuis -->
+                <div id="quiz-container" class="space-y-6">
+                    <!-- Soal 1 -->
+                    <div class="quiz-item bg-tealBrand-50 p-6 rounded-2xl border border-tealBrand-100" data-question="1" data-answer="B">
+                        <p class="font-bold text-gray-800 text-base mb-3">1. Zat yang jika dikonsumsi secara teratur dapat menimbulkan ketergantungan (adiksi) atau ketagihan yang sulit dihentikan dinamakan …</p>
+                        <div class="space-y-2">
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-gray-200 cursor-pointer hover:border-tealBrand-500 transition"><input type="radio" name="q1" value="A" class="text-tealBrand-600 focus:ring-tealBrand-500"><span>A. Zat aditif</span></label>
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-gray-200 cursor-pointer hover:border-tealBrand-500 transition"><input type="radio" name="q1" value="B" class="text-tealBrand-600 focus:ring-tealBrand-500"><span>B. Zat adiktif</span></label>
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-gray-200 cursor-pointer hover:border-tealBrand-500 transition"><input type="radio" name="q1" value="C" class="text-tealBrand-600 focus:ring-tealBrand-500"><span>C. Nutrisi</span></label>
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-gray-200 cursor-pointer hover:border-tealBrand-500 transition"><input type="radio" name="q1" value="D" class="text-tealBrand-600 focus:ring-tealBrand-500"><span>D. Preservatif</span></label>
+                        </div>
+                        <div class="explanation hidden mt-4 p-3 bg-white rounded-xl text-sm border-l-4 border-tealBrand-600 text-gray-700">
+                            <strong>Pembahasan:</strong> Zat adiktif adalah zat-zat yang apabila dikonsumsi dapat menyebabkan ketergantungan (adiksi) fisik dan psikologis.
+                        </div>
+                    </div>
+
+                    <!-- Soal 2 -->
+                    <div class="quiz-item bg-tealBrand-50 p-6 rounded-2xl border border-tealBrand-100" data-question="2" data-answer="C">
+                        <p class="font-bold text-gray-800 text-base mb-3">2. Manakah di bawah ini yang bukan merupakan contoh kelompok zat psikotropika?</p>
+                        <div class="space-y-2">
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-gray-200 cursor-pointer hover:border-tealBrand-500 transition"><input type="radio" name="q2" value="A" class="text-tealBrand-600 focus:ring-tealBrand-500"><span>A. Ekstasi</span></label>
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-gray-200 cursor-pointer hover:border-tealBrand-500 transition"><input type="radio" name="q2" value="B" class="text-tealBrand-600 focus:ring-tealBrand-500"><span>B. Sabu-sabu (Metamfetamin)</span></label>
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-gray-200 cursor-pointer hover:border-tealBrand-500 transition"><input type="radio" name="q2" value="C" class="text-tealBrand-600 focus:ring-tealBrand-500"><span>C. Kopi (Kafein)</span></label>
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-gray-200 cursor-pointer hover:border-tealBrand-500 transition"><input type="radio" name="q2" value="D" class="text-tealBrand-600 focus:ring-tealBrand-500"><span>D. Diazepam</span></label>
+                        </div>
+                        <div class="explanation hidden mt-4 p-3 bg-white rounded-xl text-sm border-l-4 border-tealBrand-600 text-gray-700">
+                            <strong>Pembahasan:</strong> Kafein dalam kopi tergolong sebagai zat psiko-aktif non-narkotika/psikotropika, sedangkan ekstasi, sabu, dan diazepam masuk dalam golongan psikotropika.
+                        </div>
+                    </div>
+
+                    <!-- Soal 3 -->
+                    <div class="quiz-item bg-tealBrand-50 p-6 rounded-2xl border border-tealBrand-100" data-question="3" data-answer="C">
+                        <p class="font-bold text-gray-800 text-base mb-3">3. Kopi dan teh membuat tubuh merasa lebih terjaga, segar, dan tidak mudah mengantuk karena mengandung zat adiktif yang bekerja sebagai ...</p>
+                        <div class="space-y-2">
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-gray-200 cursor-pointer hover:border-tealBrand-500 transition"><input type="radio" name="q3" value="A" class="text-tealBrand-600 focus:ring-tealBrand-500"><span>A. Depresan</span></label>
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-gray-200 cursor-pointer hover:border-tealBrand-500 transition"><input type="radio" name="q3" value="B" class="text-tealBrand-600 focus:ring-tealBrand-500"><span>B. Halusinogen</span></label>
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-gray-200 cursor-pointer hover:border-tealBrand-500 transition"><input type="radio" name="q3" value="C" class="text-tealBrand-600 focus:ring-tealBrand-500"><span>C. Stimulan</span></label>
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-gray-200 cursor-pointer hover:border-tealBrand-500 transition"><input type="radio" name="q3" value="D" class="text-tealBrand-600 focus:ring-tealBrand-500"><span>D. Analgesik</span></label>
+                        </div>
+                        <div class="explanation hidden mt-4 p-3 bg-white rounded-xl text-sm border-l-4 border-tealBrand-600 text-gray-700">
+                            <strong>Pembahasan:</strong> Stimulan adalah zat yang mempercepat atau meningkatkan aktivitas sistem saraf pusat sehingga detak jantung meningkat dan tubuh terasa segar/waspada.
+                        </div>
+                    </div>
+
+                    <!-- Soal 4 -->
+                    <div class="quiz-item bg-tealBrand-50 p-6 rounded-2xl border border-tealBrand-100" data-question="4" data-answer="C">
+                        <p class="font-bold text-gray-800 text-base mb-3">4. Rani mengalami perubahan perilaku setelah mengonsumsi suatu zat adiktif. Ia melihat bayangan yang sebenarnya tidak ada dan mendengar suara-suara aneh. Zat tersebut memiliki efek ...</p>
+                        <div class="space-y-2">
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-gray-200 cursor-pointer hover:border-tealBrand-500 transition"><input type="radio" name="q4" value="A" class="text-tealBrand-600 focus:ring-tealBrand-500"><span>A. Stimulan</span></label>
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-gray-200 cursor-pointer hover:border-tealBrand-500 transition"><input type="radio" name="q4" value="B" class="text-tealBrand-600 focus:ring-tealBrand-500"><span>B. Depresan</span></label>
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-gray-200 cursor-pointer hover:border-tealBrand-500 transition"><input type="radio" name="q4" value="C" class="text-tealBrand-600 focus:ring-tealBrand-500"><span>C. Halusinogen</span></label>
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-gray-200 cursor-pointer hover:border-tealBrand-500 transition"><input type="radio" name="q4" value="D" class="text-tealBrand-600 focus:ring-tealBrand-500"><span>D. Sedatif</span></label>
+                        </div>
+                        <div class="explanation hidden mt-4 p-3 bg-white rounded-xl text-sm border-l-4 border-tealBrand-600 text-gray-700">
+                            <strong>Pembahasan:</strong> Efek halusinogen membuat penggunanya mengalami halusinasi, yaitu melihat, mendengar, atau merasakan sesuatu yang sebenarnya tidak ada.
+                        </div>
+                    </div>
+
+                    <!-- Soal 5 -->
+                    <div class="quiz-item bg-tealBrand-50 p-6 rounded-2xl border border-tealBrand-100" data-question="5" data-answer="C">
+                        <p class="font-bold text-gray-800 text-base mb-3">5. Asap rokok mengandung berbagai zat berbahaya. Zat racun yang terkandung dalam rokok dan berfungsi mengikat hemoglobin darah sehingga menghambat pengangkutan oksigen adalah ...</p>
+                        <div class="space-y-2">
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-gray-200 cursor-pointer hover:border-tealBrand-500 transition"><input type="radio" name="q5" value="A" class="text-tealBrand-600 focus:ring-tealBrand-500"><span>A. Nikotin</span></label>
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-gray-200 cursor-pointer hover:border-tealBrand-500 transition"><input type="radio" name="q5" value="B" class="text-tealBrand-600 focus:ring-tealBrand-500"><span>B. Tar</span></label>
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-gray-200 cursor-pointer hover:border-tealBrand-500 transition"><input type="radio" name="q5" value="C" class="text-tealBrand-600 focus:ring-tealBrand-500"><span>C. Karbon Monoksida (CO)</span></label>
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-gray-200 cursor-pointer hover:border-tealBrand-500 transition"><input type="radio" name="q5" value="D" class="text-tealBrand-600 focus:ring-tealBrand-500"><span>D. Alkohol</span></label>
+                        </div>
+                        <div class="explanation hidden mt-4 p-3 bg-white rounded-xl text-sm border-l-4 border-tealBrand-600 text-gray-700">
+                            <strong>Pembahasan:</strong> Karbon Monoksida (CO) memiliki daya ikat terhadap hemoglobin jauh lebih kuat daripada oksigen, sehingga mengganggu pasokan oksigen dalam darah.
+                        </div>
+                    </div>
+
+                    <!-- Soal 6 -->
+                    <div class="quiz-item bg-tealBrand-50 p-6 rounded-2xl border border-tealBrand-100" data-question="6" data-answer="B">
+                        <p class="font-bold text-gray-800 text-base mb-3">6. Penggunaan minuman beralkohol secara terus-menerus dalam jangka panjang dapat merusak organ pencernaan dan menyebabkan peradangan/kerusakan serius pada ...</p>
+                        <div class="space-y-2">
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-gray-200 cursor-pointer hover:border-tealBrand-500 transition"><input type="radio" name="q6" value="A" class="text-tealBrand-600 focus:ring-tealBrand-500"><span>A. Paru-paru</span></label>
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-gray-200 cursor-pointer hover:border-tealBrand-500 transition"><input type="radio" name="q6" value="B" class="text-tealBrand-600 focus:ring-tealBrand-500"><span>B. Hati (Liver)</span></label>
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-gray-200 cursor-pointer hover:border-tealBrand-500 transition"><input type="radio" name="q6" value="C" class="text-tealBrand-600 focus:ring-tealBrand-500"><span>C. Tulang</span></label>
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-gray-200 cursor-pointer hover:border-tealBrand-500 transition"><input type="radio" name="q6" value="D" class="text-tealBrand-600 focus:ring-tealBrand-500"><span>D. Telinga</span></label>
+                        </div>
+                        <div class="explanation hidden mt-4 p-3 bg-white rounded-xl text-sm border-l-4 border-tealBrand-600 text-gray-700">
+                            <strong>Pembahasan:</strong> Hati bekerja keras menetralkan alkohol. Konsumsi berlebih jangka panjang dapat menyebabkan penyakit sirosis hati (kerusakan organ hati).
+                        </div>
+                    </div>
+
+                    <!-- Soal 7 -->
+                    <div class="quiz-item bg-tealBrand-50 p-6 rounded-2xl border border-tealBrand-100" data-question="7" data-answer="C">
+                        <p class="font-bold text-gray-800 text-base mb-3">7. Tindakan preventif terbaik bagi remaja agar terhindar dari bahaya penyalahgunaan zat adiktif dan narkoba adalah ...</p>
+                        <div class="space-y-2">
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-gray-200 cursor-pointer hover:border-tealBrand-500 transition"><input type="radio" name="q7" value="A" class="text-tealBrand-600 focus:ring-tealBrand-500"><span>A. Mencoba sedikit saja untuk menghilangkan rasa penasaran</span></label>
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-gray-200 cursor-pointer hover:border-tealBrand-500 transition"><input type="radio" name="q7" value="B" class="text-tealBrand-600 focus:ring-tealBrand-500"><span>B. Bergaul bebas tanpa membatasi teman</span></label>
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-gray-200 cursor-pointer hover:border-tealBrand-500 transition"><input type="radio" name="q7" value="C" class="text-tealBrand-600 focus:ring-tealBrand-500"><span>C. Mengikuti kegiatan ekstrakurikuler sekolah dan olahraga positif</span></label>
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-gray-200 cursor-pointer hover:border-tealBrand-500 transition"><input type="radio" name="q7" value="D" class="text-tealBrand-600 focus:ring-tealBrand-500"><span>D. Menyimpan masalah sendiri tanpa berdiskusi dengan orang tua</span></label>
+                        </div>
+                        <div class="explanation hidden mt-4 p-3 bg-white rounded-xl text-sm border-l-4 border-tealBrand-600 text-gray-700">
+                            <strong>Pembahasan:</strong> Mengisi waktu dengan kegiatan positif, berolahraga, serta memilih pergaulan yang baik adalah cara paling efektif mencegah jeratan zat adiktif.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tombol Submit Kuis -->
+                <div class="mt-8 text-center space-y-4">
+                    <button onclick="checkQuiz()" class="bg-tealBrand-600 hover:bg-tealBrand-700 text-white font-bold px-8 py-3.5 rounded-xl shadow-lg transition-transform transform hover:-translate-y-0.5 w-full md:w-auto">Periksa Jawaban Kuis</button>
+                    <div id="quiz-result" class="hidden text-xl font-bold text-tealBrand-700 pt-4"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. TAB DRAG AND DROP -->
+        <section id="tab-dragdrop" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-tealBrand-100 max-w-4xl mx-auto space-y-6">
+                <div class="text-center space-y-2">
+                    <span class="bg-tealBrand-100 text-tealBrand-700 text-xs font-semibold px-3 py-1 rounded-full">Mini Game Edukatif</span>
+                    <h2 class="text-2xl md:text-3xl font-bold text-tealBrand-700">Aktivitas Klasifikasi Zat Adiktif</h2>
+                    <p class="text-gray-500 text-sm">Seret (Drag) kartu zat di bawah ini ke dalam kotak kategori efek yang sesuai!</p>
+                </div>
+
+                <!-- Draggable Items Container -->
+                <div class="bg-tealBrand-50 p-4 rounded-2xl border border-tealBrand-100">
+                    <p class="text-sm font-semibold text-tealBrand-700 mb-3">Kartu Zat (Seret ke kotak di bawah):</p>
+                    <div id="drag-items" class="flex flex-wrap gap-3 min-h-[60px] items-center">
+                        <div draggable="true" ondragstart="drag(event)" id="item-kopi" data-category="stimulan" class="bg-white px-4 py-2.5 rounded-xl shadow-sm border border-tealBrand-200 font-semibold text-tealBrand-700 cursor-grab active:cursor-grabbing">☕ Kopi (Kafein)</div>
+                        <div draggable="true" ondragstart="drag(event)" id="item-alkohol" data-category="depresan" class="bg-white px-4 py-2.5 rounded-xl shadow-sm border border-tealBrand-200 font-semibold text-tealBrand-700 cursor-grab active:cursor-grabbing">🍺 Alkohol</div>
+                        <div draggable="true" ondragstart="drag(event)" id="item-ganja" data-category="halusinogen" class="bg-white px-4 py-2.5 rounded-xl shadow-sm border border-tealBrand-200 font-semibold text-tealBrand-700 cursor-grab active:cursor-grabbing">🌿 Ganja</div>
+                        <div draggable="true" ondragstart="drag(event)" id="item-nikotin" data-category="stimulan" class="bg-white px-4 py-2.5 rounded-xl shadow-sm border border-tealBrand-200 font-semibold text-tealBrand-700 cursor-grab active:cursor-grabbing">🚬 Nikotin (Rokok)</div>
+                        <div draggable="true" ondragstart="drag(event)" id="item-diazepam" data-category="depresan" class="bg-white px-4 py-2.5 rounded-xl shadow-sm border border-tealBrand-200 font-semibold text-tealBrand-700 cursor-grab active:cursor-grabbing">💊 Diazepam</div>
+                    </div>
+                </div>
+
+                <!-- Drop Zones Container -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Dropzone Stimulan -->
+                    <div ondragover="allowDrop(event)" ondragleave="removeDropStyle(event)" ondrop="drop(event, 'stimulan')" class="dropzone bg-teal-50 border-2 border-dashed border-tealBrand-300 rounded-2xl p-5 min-h-[200px] flex flex-col items-center justify-start space-y-3">
+                        <h3 class="font-bold text-tealBrand-700 text-lg">⚡ Stimulan</h3>
+                        <p class="text-xs text-gray-500 text-center">Letakkan zat peningkat aktivitas saraf di sini</p>
+                        <div class="drop-target-area w-full space-y-2"></div>
+                    </div>
+
+                    <!-- Dropzone Depresan -->
+                    <div ondragover="allowDrop(event)" ondragleave="removeDropStyle(event)" ondrop="drop(event, 'depresan')" class="dropzone bg-blue-50 border-2 border-dashed border-blue-300 rounded-2xl p-5 min-h-[200px] flex flex-col items-center justify-start space-y-3">
+                        <h3 class="font-bold text-blue-700 text-lg">💤 Depresan</h3>
+                        <p class="text-xs text-gray-500 text-center">Letakkan zat penenang/perlambat saraf di sini</p>
+                        <div class="drop-target-area w-full space-y-2"></div>
+                    </div>
+
+                    <!-- Dropzone Halusinogen -->
+                    <div ondragover="allowDrop(event)" ondragleave="removeDropStyle(event)" ondrop="drop(event, 'halusinogen')" class="dropzone bg-amber-50 border-2 border-dashed border-amber-300 rounded-2xl p-5 min-h-[200px] flex flex-col items-center justify-start space-y-3">
+                        <h3 class="font-bold text-amber-700 text-lg">🌀 Halusinogen</h3>
+                        <p class="text-xs text-gray-500 text-center">Letakkan zat pembuat halusinasi di sini</p>
+                        <div class="drop-target-area w-full space-y-2"></div>
+                    </div>
+                </div>
+
+                <!-- Reset Button -->
+                <div class="text-center pt-2">
+                    <button onclick="resetDragDrop()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-6 py-2.5 rounded-xl text-sm transition">🔄 Atur Ulang Permainan</button>
+                    <div id="drag-feedback" class="mt-4 font-bold text-tealBrand-700"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. TAB TENTANG -->
+        <section id="tab-tentang" class="tab-content hidden space-y-6">
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-tealBrand-100 max-w-2xl mx-auto text-center space-y-6">
+                <div class="w-20 h-20 bg-tealBrand-100 text-tealBrand-600 rounded-2xl flex items-center justify-center text-3xl mx-auto font-bold shadow-inner">
+                    👩‍🏫
+                </div>
+                <div class="space-y-2">
+                    <h2 class="text-2xl font-bold text-tealBrand-700">Tentang Pengembang</h2>
+                    <p class="text-gray-500 text-sm">Media Pembelajaran Interaktif Berbasis Web</p>
+                </div>
+                <div class="bg-tealBrand-50 p-6 rounded-2xl text-left space-y-3 text-gray-700">
+                    <div class="flex justify-between border-b border-tealBrand-100 pb-2">
+                        <span class="font-semibold text-gray-500">Nama Pengembang</span>
+                        <span class="font-bold text-tealBrand-700">Anissa Nurlely</span>
+                    </div>
+                    <div class="flex justify-between border-b border-tealBrand-100 pb-2">
+                        <span class="font-semibold text-gray-500">Sasaran Pengguna</span>
+                        <span class="font-bold text-gray-800">Siswa SMP Kelas 9 (Fase D)</span>
+                    </div>
+                    <div class="flex justify-between border-b border-tealBrand-100 pb-2">
+                        <span class="font-semibold text-gray-500">Mata Pelajaran</span>
+                        <span class="font-bold text-gray-800">Ilmu Pengetahuan Alam (IPA)</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="font-semibold text-gray-500">Topik Utama</span>
+                        <span class="font-bold text-gray-800">Zat Adiktif & Psikotropika</span>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-500">Dibuat khusus untuk mendukung proses pembelajaran interaktif baik di dalam kelas maupun secara mandiri di rumah.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t mt-12 py-6 text-center text-sm text-gray-500">
+        <p>&copy; 2026 <strong>Anissa Nurlely</strong> • Media Pembelajaran Zat Adiktif Kelas 9 SMP.</p>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // 1. Sistem Navigasi Tab Single Page Application (SPA)
+        function switchTab(tabId) {
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.add('hidden'));
+
+            const selectedTab = document.getElementById('tab-' + tabId);
+            if (selectedTab) {
+                selectedTab.classList.remove('hidden');
+            }
+
+            // Update styling active nav buttons desktop
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(btn => {
+                btn.classList.remove('bg-tealBrand-600', 'text-white', 'shadow-sm');
+                btn.classList.add('text-gray-600', 'hover:bg-tealBrand-50', 'hover:text-tealBrand-600');
+            });
+
+            const activeNavBtn = document.getElementById('nav-' + tabId);
+            if (activeNavBtn) {
+                activeNavBtn.classList.remove('text-gray-600', 'hover:bg-tealBrand-50', 'hover:text-tealBrand-600');
+                activeNavBtn.classList.add('bg-tealBrand-600', 'text-white', 'shadow-sm');
+            }
+
+            // Stop speech when switching tabs
+            stopSpeech();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Toggle Mobile Menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // 2. Fitur Text-to-Speech (Web Speech API)
+        let currentUtterance = null;
+
+        function readText(elementId) {
+            if (!('speechSynthesis' in window)) {
+                alert('Maaf, browser Anda tidak mendukung fitur pembaca suara (Text-to-Speech).');
+                return;
+            }
+
+            // Berhentikan suara sebelumnya jika ada
+            stopSpeech();
+
+            const container = document.getElementById(elementId);
+            if (!container) return;
+
+            const textToRead = container.innerText;
+            currentUtterance = new SpeechSynthesisUtterance(textToRead);
+            currentUtterance.lang = 'id-ID';
+            currentUtterance.rate = 1.0; // Kecepatan normal
+
+            window.speechSynthesis.speak(currentUtterance);
+        }
+
+        function stopSpeech() {
+            if ('speechSynthesis' in window && window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+            }
+        }
+
+        // 3. Evaluasi Kuis Interaktif
+        function checkQuiz() {
+            const quizItems = document.querySelectorAll('.quiz-item');
+            let score = 0;
+            let total = quizItems.length;
+
+            quizItems.forEach(item => {
+                const qNum = item.getAttribute('data-question');
+                const correctAnswer = item.getAttribute('data-answer');
+                const selectedOption = item.querySelector(`input[name="q${qNum}"]:checked`);
+                const explanation = item.querySelector('.explanation');
+
+                // Tampilkan pembahasan
+                explanation.classList.remove('hidden');
+
+                // Highlight jawaban
+                const options = item.querySelectorAll('label');
+                options.forEach(opt => {
+                    const radio = opt.querySelector('input');
+                    if (radio.value === correctAnswer) {
+                        opt.classList.add('bg-emerald-100', 'border-emerald-500', 'font-semibold');
+                    } else if (radio.checked && radio.value !== correctAnswer) {
+                        opt.classList.add('bg-rose-100', 'border-rose-400');
+                    }
+                });
+
+                if (selectedOption && selectedOption.value === correctAnswer) {
+                    score++;
+                }
+            });
+
+            const resultDiv = document.getElementById('quiz-result');
+            resultDiv.classList.remove('hidden');
+            resultDiv.innerHTML = `🎉 Skor Anda: ${score} dari ${total} (${Math.round((score/total)*100)}% benar)!`;
+            resultDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 4. Drag and Drop Mini Game Logic
+        function allowDrop(ev) {
+            ev.preventDefault();
+            ev.currentTarget.classList.add('drag-over');
+        }
+
+        function removeDropStyle(ev) {
+            ev.currentTarget.classList.remove('drag-over');
+        }
+
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+        }
+
+        function drop(ev, expectedCategory) {
+            ev.preventDefault();
+            ev.currentTarget.classList.remove('drag-over');
+            const dataId = ev.dataTransfer.getData("text");
+            const draggedElement = document.getElementById(dataId);
+            
+            if (draggedElement) {
+                const itemCategory = draggedElement.getAttribute('data-category');
+                const targetArea = ev.currentTarget.querySelector('.drop-target-area');
+                
+                // Pindahkan elemen ke target area dropzone
+                targetArea.appendChild(draggedElement);
+
+                // Validasi benar/salah kategori
+                if (itemCategory === expectedCategory) {
+                    draggedElement.className = "bg-emerald-100 border border-emerald-400 text-emerald-800 px-3 py-2 rounded-xl text-sm font-semibold shadow-sm";
+                } else {
+                    draggedElement.className = "bg-rose-100 border border-rose-400 text-rose-800 px-3 py-2 rounded-xl text-sm font-semibold shadow-sm";
+                }
+
+                checkDragDropCompletion();
+            }
+        }
+
+        function checkDragDropCompletion() {
+            const dragItemsContainer = document.getElementById('drag-items');
+            const feedback = document.getElementById('drag-feedback');
+            
+            if (dragItemsContainer.children.length === 0) {
+                feedback.innerHTML = "✨ Hebat! Semua kartu zat berhasil diklasifikasikan ke dalam kotaknya masing-masing.";
+            } else {
+                feedback.innerHTML = "";
+            }
+        }
+
+        function resetDragDrop() {
+            const dragItemsContainer = document.getElementById('drag-items');
+            // Kumpulkan kembali semua elemen zat ke kontainer asal
+            const allItems = document.querySelectorAll('[draggable="true"]');
+            allItems.forEach(item => {
+                item.className = "bg-white px-4 py-2.5 rounded-xl shadow-sm border border-tealBrand-200 font-semibold text-tealBrand-700 cursor-grab active:cursor-grabbing";
+                dragItemsContainer.appendChild(item);
+            });
+
+            // Bersihkan target area
+            const targetAreas = document.querySelectorAll('.drop-target-area');
+            targetAreas.forEach(area => area.innerHTML = '');
+            document.getElementById('drag-feedback').innerHTML = "";
+        }
+    </script>
+</body>
+</html>
